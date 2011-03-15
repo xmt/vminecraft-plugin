@@ -29,7 +29,7 @@ class Config
             writeConfig();
         }
         catch (IOException e) {
-            System.out.println(name + "s: An error occured reading configuration, using defaults.");
+            System.out.println(name + ": An error occured reading configuration, using defaults.");
             config = defaultConfig();
         }
 

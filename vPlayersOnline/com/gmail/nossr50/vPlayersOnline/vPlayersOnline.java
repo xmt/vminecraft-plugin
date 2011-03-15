@@ -2,11 +2,6 @@ package com.gmail.nossr50.vPlayersOnline;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Properties;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
@@ -26,10 +21,12 @@ public class vPlayersOnline extends JavaPlugin {
 
     public PermissionHandler Permissions;
 
+    @Override
     public void onLoad() {
 
     }
 
+    @Override
     public void onEnable() {
         pdfFile = this.getDescription();
         Config.name = pdfFile.getName();
@@ -48,6 +45,8 @@ public class vPlayersOnline extends JavaPlugin {
         //Displays a message when plugin is loaded
         System.out.println(Config.name + " version " + pdfFile.getVersion() + " is enabled!");
     }
+
+    @Override
     public void onDisable() {
         System.out.println(Config.name + " disabled.");
     }
@@ -57,6 +56,7 @@ public class vPlayersOnline extends JavaPlugin {
 
         if (Permissions == null) {
             if (plugin != null) {
+                System.out.println(Config.name + ": Found Permissions.");
                 Permissions = ((Permissions)plugin).getHandler();
             }
         }
