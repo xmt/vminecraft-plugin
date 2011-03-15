@@ -6,6 +6,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 
 /**
  * Handle events for all Player related events
@@ -35,9 +36,9 @@ public class vPlayerListener extends PlayerListener {
     private static String parseColors(String str) {
         final StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < str.length(); ++i) {
+        for (int i = 0; i < str.length()-1; ++i) {
             char c = str.charAt(i);
-
+            
             if (c == '&') {
                 char next = str.charAt(i+1);
                 if (next == '&') {
@@ -55,8 +56,24 @@ public class vPlayerListener extends PlayerListener {
 
             sb.append(c);
         }
+        sb.append(str.charAt(str.length()-1));
 
         return sb.toString();
+    }
+
+    private String getPlayerName(Player player) {
+        String name = player.getName();
+        if (plugin.Permissions != null) {
+            final World world = player.getWorld();
+            final String w = world.getName();
+            final String group = plugin.Permissions.getGroup(w, name);
+
+            name =    plugin.Permissions.getGroupPrefix(w, group)
+                    + name
+                    + plugin.Permissions.getGroupSuffix(w, group)
+                    + ChatColor.WHITE;
+        }
+        return name;
     }
 
     //Message to be sent when a player joins
@@ -85,12 +102,12 @@ public class vPlayerListener extends PlayerListener {
             int x = 0;
             for(Player p : plugin.getServer().getOnlinePlayers())
             {
-            	if(p != null && x+1 >= count){
-            		tempList+= p.getName();
+            	if(p != null && x+1 >= count) {
+            		tempList += getPlayerName(p);
             		x++;
             	}
-            	if(p != null && x < count){
-            		tempList+= p.getName() +", ";
+            	if(p != null && x < count) {
+            		tempList += getPlayerName(p) +", ";
             		x++;
             	}
             }
