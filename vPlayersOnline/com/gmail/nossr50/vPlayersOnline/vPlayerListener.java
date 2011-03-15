@@ -77,10 +77,14 @@ public class vPlayerListener extends PlayerListener {
             final String w = world.getName();
             final String group = plugin.Permissions.getGroup(w, name);
 
-            name =    plugin.Permissions.getGroupPrefix(w, group)
-                    + name
-                    + plugin.Permissions.getGroupSuffix(w, group)
-                    + ChatColor.WHITE;
+            String prefix = plugin.Permissions.getGroupPrefix(w, group);
+            if (prefix == null)
+                prefix = "";
+            String suffix = plugin.Permissions.getGroupSuffix(w, group);
+            if (suffix == null)
+                suffix = "";
+
+            name = prefix + name + suffix + ChatColor.WHITE;
         }
         return name;
     }
