@@ -38,7 +38,8 @@ class Config
 
     private static void writeConfig() {
         File f = new File(CONFIG_FILE);
-        if (f.getParentFile().mkdirs()) {
+        File parent = f.getParentFile();
+        if (parent.exists() || parent.mkdirs()) {
             try {
                 FileWriter fw = new FileWriter(f);
                 fw.write("# vPlayersOnline configuration file\r\n");
@@ -53,6 +54,9 @@ class Config
                 fw.write("# &6 dark yellow    &e yellow\r\n");
                 fw.write("# &7 light grey     &f white\r\n");
                 fw.write("# &8 dark grey\r\n");
+                fw.write("\r\n");
+                fw.write("showOnLogin = true\r\n");
+                fw.write("cmds = list,who\r\n");
                 fw.write("\r\n");
                 fw.write("PlayersOnline = &aThere are %d players online\r\n");
                 fw.write("PlayerList    = &cPlayer List &f(%s)\r\n");
@@ -69,6 +73,8 @@ class Config
 
     private static Properties defaultConfig() {
         Properties config = new Properties();
+        config.setProperty("showOnLogin", "true");
+        config.setProperty("cmds", "list,who");
         config.setProperty("PlayersOnline", "&aThere are %d players online");
         config.setProperty("PlayerList", "&cPlayer List &f(%s)");
         config.setProperty("TotalPlayers", "&cTotal Players: &a%d");

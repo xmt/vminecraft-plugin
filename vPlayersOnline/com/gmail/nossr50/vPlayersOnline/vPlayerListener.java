@@ -1,5 +1,7 @@
 package com.gmail.nossr50.vPlayersOnline;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -19,8 +21,15 @@ public class vPlayerListener extends PlayerListener {
     private final String TotalPlayers;
     private final String _1POnline;
 
+    private boolean onLogin;
+    private List<String> cmds;
+
     public vPlayerListener(vPlayersOnline instance, Properties config) {
         plugin = instance;
+        
+        onLogin = Boolean.parseBoolean(config.getProperty("showOnLogin"));
+        cmds = Arrays.asList(config.getProperty("cmds").split(","));
+
         PlayersOnline = parseColors(config.getProperty("PlayersOnline"));
         PlayerList = parseColors(config.getProperty("PlayerList"));
         TotalPlayers = parseColors(config.getProperty("TotalPlayers"));
@@ -79,6 +88,8 @@ public class vPlayerListener extends PlayerListener {
     //Message to be sent when a player joins
     @Override
     public void onPlayerJoin(PlayerEvent event) {
+        if (!onLogin) return;
+        
         Player player = event.getPlayer();
         int count = playerCount();
 
@@ -94,7 +105,13 @@ public class vPlayerListener extends PlayerListener {
     public void onPlayerCommandPreprocess(PlayerChatEvent event) {
     	String[] split = event.getMessage().split(" ");
         Player player = event.getPlayer();
-        if(split[0].equalsIgnoreCase("/list") || split[0].equalsIgnoreCase("/who")){
+
+        String cmd = split[0].toLowerCase();
+        if (cmd.startsWith("/")) {
+            cmd = cmd.substring(1);
+        }
+
+        if(cmds.contains(cmd)){
             event.setCancelled(true);
 
             int count = playerCount();
